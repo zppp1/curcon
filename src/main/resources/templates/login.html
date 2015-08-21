@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+    <head>
+        <title>Currency Converter</title>
+        <meta charset="utf-8"/>
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css"/>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"/>
+        <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  	    <script>
+		  $(function() {
+		    $( "#dateOfBirth" ).datepicker({dateFormat: 'dd-mm-yy', changeYear: true, yearRange : '-130:+0'});
+		  });
+		</script>
+    </head>
+    <body>
+   		<nav class="navbar navbar-default">
+		    <div class="navbar-header">
+  				<a href="#" class="navbar-brand">Currency Converter</a>
+		    </div>
+			<div class="collapse navbar-collapse">
+		        <form class="navbar-form navbar-right" th:action="@{/}" method="post">
+					<div class="form-group">
+		        		<input id="username" type="text" name="username" class="form-control" placeholder="Email" required="required"/>
+		        	</div>
+					<div class="form-group">
+		        		<input id="password" type="password" name="password" class="form-control" placeholder="Password" required="required"/>
+		        	</div>
+	        		<button type="submit" class="btn btn-primary">Log In</button>
+		        </form>
+	        </div>
+	    </nav>
+    	<div class="container-fluid">
+	       	<div class="row">
+	        	<div class="col-md-6 col-md-offset-3">
+	        		<h3 th:if="${param.error}"><span class="label label-danger">Invalid email or password</span></h3>
+	        		<h3 th:if="${param.logout}"><span class="label label-success">You have been logged out</span></h3>
+	        	</div>
+	       	</div>
+	       	<div class="row">
+	        	<div class="col-md-6 col-md-offset-3 bg-warning">
+			        <form th:action="@{/register}" th:object="${registerForm}" method="post">
+				    	<div th:class="${#fields.hasErrors('email')} ? 'form-group has-error' : 'form-group'">
+							<label for="email">Email</label> *
+							<input id="email" type="text" th:field="*{email}" required="required" class="form-control"/>
+							<span class="label label-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email errors</span>
+						</div>
+				    	<div th:class="${#fields.hasErrors('password')} ? 'form-group has-error' : 'form-group'">
+							<label for="password">Password</label> * 
+							<input id="password" type="password" th:field="*{password}" required="required" class="form-control"/>
+							<span class="label label-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password errors</span>
+			    		</div>
+				    	<div th:class="${#fields.hasErrors('confirmPassword')} ? 'form-group has-error' : 'form-group'">
+							<label for="confirmPassword">Confirm Password</label> * 
+							<input id="confirmPassword" type="password" th:field="*{confirmPassword}" required="required" class="form-control"/>
+							<span class="label label-danger" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}">Confirm Password errors</span>
+			    		</div>
+				    	<div th:class="${#fields.hasErrors('name')} ? 'form-group has-error' : 'form-group'">
+							<label for="name">Name</label> *
+							<input id="name" type="text" th:field="*{name}" required="required" class="form-control"/>
+							<span class="label label-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name errors</span>
+						</div>
+				    	<div th:class="${#fields.hasErrors('dateOfBirth')} ? 'form-group has-error' : 'form-group'">
+							<label for="dateOfBirth">Date of Birth</label> *
+							<input id="dateOfBirth" type="text" name="dateOfBirth" th:field="*{dateOfBirth}" required="required" class="form-control"/>
+							<span class="label label-danger" th:if="${#fields.hasErrors('dateOfBirth')}" th:errors="*{dateOfBirth}">Date of Birth errors</span>
+			    		</div>
+				    	<div th:class="${#fields.hasErrors('street')} ? 'form-group has-error' : 'form-group'">
+							<label for="street">Street</label> 
+							<input id="street" type="text" name="street" th:field="*{street}" class="form-control"/>
+							<span class="label label-danger" th:if="${#fields.hasErrors('street')}" th:errors="*{street}">Street errors</span>
+			    		</div>
+				    	<div th:class="${#fields.hasErrors('postalCode')} ? 'form-group has-error' : 'form-group'">
+							<label for="postalCode">Postal Code</label>
+							<input id="postalCode" type="text" name="postalCode" th:field="*{postalCode}" class="form-control"/>
+							<span class="label label-danger" th:if="${#fields.hasErrors('postalCode')}" th:errors="*{postalCode}">Postal code errors</span>
+			    		</div>
+				    	<div th:class="${#fields.hasErrors('city')} ? 'form-group has-error' : 'form-group'">
+							<label for="city">City</label> 
+							<input id="city" type="text" name="city" th:field="*{city}" class="form-control"/>
+							<span class="label label-danger" th:if="${#fields.hasErrors('city')}" th:errors="*{city}">City errors</span>
+			    		</div>
+				    	<div th:class="${#fields.hasErrors('country')} ? 'form-group has-error' : 'form-group'">
+							<label for="country">Country</label> 
+			       			<select id="country" name="country" th:field="*{country}" class="form-control">
+							 	<option th:each="ctry : ${T(org.curcon.app.data.Country).values()}" th:value="${ctry}" th:text="${ctry.value}"></option>
+			       			</select>
+							<span class="label label-danger" th:if="${#fields.hasErrors('country')}" th:errors="*{country}">Country errors</span>
+						</div>
+				    	<div class="form-group">
+			        		<button type="submit" class="btn btn-info">Sign Up</button>
+						</div>
+					 </form>
+				 </div>
+			 </div>
+		</div>
+    </body>
+</html>

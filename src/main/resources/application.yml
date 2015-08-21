@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: currency-converter
+  datasource:
+    url: jdbc:h2:mem:curcon
+    username: sa
+    password: sa
+    driverClassName: org.h2.Driver
+  jpa:
+    properties.eclipselink.ddl-generation: drop-and-create-tables
+    properties.eclipselink.weaving: false
+    properties.eclipselink.logging.level: FINE
+    properties.eclipselink.logging.level.sql: FINE
+    properties.eclipselink.logging.parameters: true
+  thymeleaf:
+    cache: false
+
+endpoints:
+  health:
+    sensitive: false
+    metrics: false
+
+exchangeratecache:
+  ttl: 10
+  size: 1000
+
+openexchangerates:
+  appid: 37750386b214492b96aec4ae5ebe1c99
+  fixedBase: true
