@@ -1,7 +1,6 @@
 package org.curcon.app.provider.cache;
 
 import java.util.Date;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
@@ -56,7 +55,7 @@ public class CachedExchangeRateProviderImpl implements CachedExchangeRateProvide
 		Double rate = null;
 		try {
 			rate = cache.get(new ExchangeRateCacheKey(null, base, target), () -> provider.getLatest(base, target));
-		} catch (ExecutionException e) {
+		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
 		return rate;
@@ -68,7 +67,7 @@ public class CachedExchangeRateProviderImpl implements CachedExchangeRateProvide
 		try {
 			rate = cache.get(new ExchangeRateCacheKey(date, base, target),
 					() -> provider.getHistorical(date, base, target));
-		} catch (ExecutionException e) {
+		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
 		return rate;

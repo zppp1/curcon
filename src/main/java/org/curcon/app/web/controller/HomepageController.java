@@ -66,21 +66,20 @@ public class HomepageController {
 		}
 		Double rate = form.isLatest() ? exchangeRateProvider.getLatest(form.getBase(), form.getTarget())
 				: exchangeRateProvider.getHistorical(form.getDate(), form.getBase(), form.getTarget());
-		if (rate == null) {
-			return "redirect:/home?error";
+		if (rate != null) {
+			UserQuery q = new UserQuery();
+			q.setDate(form.getDate());
+			q.setSource(form.getBase());
+			q.setTarget(form.getTarget());
+			q.setRate(rate);
+			User user = userRepository.findByEmail(email);
+			// Remove potential duplicates
+			user.getQueries().remove(q);
+			user.getQueries().add(q);
+			userRepository.save(user);
 		}
-		UserQuery q = new UserQuery();
-		q.setDate(form.getDate());
-		q.setSource(form.getBase());
-		q.setTarget(form.getTarget());
-		q.setRate(rate);
-		User user = userRepository.findByEmail(email);
-		// Remove potential duplicates
-		user.getQueries().remove(q);
-		user.getQueries().add(q);
-		userRepository.save(user);
 		redirectAttributes.addFlashAttribute("query", form);
-		return "redirect:/home";
+		return rate == null ? "redirect:/home?error" : "redirect:/home";
 	}
 
 	private String getUserEmail() {
