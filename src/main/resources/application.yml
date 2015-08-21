@@ -13,7 +13,7 @@ spring:
     properties.eclipselink.logging.level.sql: FINE
     properties.eclipselink.logging.parameters: true
   thymeleaf:
-    cache: false
+    cache: true
 
 endpoints:
   health:
